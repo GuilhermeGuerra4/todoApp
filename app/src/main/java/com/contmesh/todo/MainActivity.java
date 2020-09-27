@@ -3,6 +3,7 @@ package com.contmesh.todo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements ModalDialog.Botto
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toolbar toolbar = findViewById(R.id.toolbarX);
+        setSupportActionBar(toolbar);
         FloatingActionButton floatBTC = findViewById(R.id.floatBTC);
 
         floatBTC.setOnClickListener(new View.OnClickListener(){
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements ModalDialog.Botto
             public void onClick(View view) {
                 ModalDialog dia = new ModalDialog();
                 dia.show(getSupportFragmentManager(), "teste");
-
             }
         });
 
