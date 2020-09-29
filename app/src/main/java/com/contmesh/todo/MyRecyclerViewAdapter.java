@@ -2,10 +2,13 @@ package com.contmesh.todo;
 
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -17,6 +20,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
 
     private ArrayList<Item> items;
+    private static final int VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0;
+    private static final int VIEW_TYPE_OBJECT_VIEW = 1;
+
 
     MyRecyclerViewAdapter(ArrayList<Item> items){
         this.items = items;
@@ -27,10 +33,25 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public MyRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
-        View view = mLayoutInflater.inflate(R.layout.todo_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder;
+        View view;
+        switch (viewType){
+            case VIEW_TYPE_EMPTY_LIST_PLACEHOLDER:
+                    view = mLayoutInflater.inflate(R.layout.empty, parent, false);
+                    viewHolder = new ViewHolder(view);
+                break;
+            case VIEW_TYPE_OBJECT_VIEW:
+                    view = mLayoutInflater.inflate(R.layout.todo_item, parent, false);
+                    viewHolder = new ViewHolder(view);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + viewType);
+        }
+
         return viewHolder;
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -44,12 +65,30 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return items.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if(items.size() != 0){
+            Log.d("guilherme", "Item created");
+            return VIEW_TYPE_OBJECT_VIEW;
+        }
+        else{
+            Log.d("guilherme", "is empty");
+            return VIEW_TYPE_EMPTY_LIST_PLACEHOLDER;
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public CheckBox check;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
             check = itemView.findViewById(R.id.check);
         }
     }
