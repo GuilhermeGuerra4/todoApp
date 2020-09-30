@@ -34,6 +34,7 @@ public class ModalDialog extends BottomSheetDialogFragment {
         final View view = inflater.inflate(R.layout.modal_layout, container, false);
         Button add_task = view.findViewById(R.id.add_task);
         input = view.findViewById(R.id.input);
+        input.requestFocus();
 
         add_task.setOnClickListener(new View.OnClickListener(){
             @Override

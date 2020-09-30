@@ -3,8 +3,10 @@ package com.contmesh.todo;
 public class Item {
     private String text;
     private Boolean isChecked;
+    private long id;
 
-    public Item(String text, Boolean isChecked) {
+    public Item(long id, String text, Boolean isChecked) {
+        this.id = id;
         this.text = text;
         this.isChecked = isChecked;
     }
@@ -25,4 +27,11 @@ public class Item {
         isChecked = checked;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

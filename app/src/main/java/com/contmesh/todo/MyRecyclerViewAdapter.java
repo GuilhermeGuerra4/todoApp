@@ -20,8 +20,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
 
     private ArrayList<Item> items;
-    private static final int VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0;
-    private static final int VIEW_TYPE_OBJECT_VIEW = 1;
 
 
     MyRecyclerViewAdapter(ArrayList<Item> items){
@@ -35,23 +33,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         ViewHolder viewHolder;
         View view;
-        switch (viewType){
-            case VIEW_TYPE_EMPTY_LIST_PLACEHOLDER:
-                    view = mLayoutInflater.inflate(R.layout.empty, parent, false);
-                    viewHolder = new ViewHolder(view);
-                break;
-            case VIEW_TYPE_OBJECT_VIEW:
-                    view = mLayoutInflater.inflate(R.layout.todo_item, parent, false);
-                    viewHolder = new ViewHolder(view);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + viewType);
-        }
-
+        view = mLayoutInflater.inflate(R.layout.todo_item, parent, false);
+        viewHolder = new ViewHolder(view);
         return viewHolder;
     }
-
-
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -65,16 +50,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return items.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(items.size() != 0){
-            Log.d("guilherme", "Item created");
-            return VIEW_TYPE_OBJECT_VIEW;
-        }
-        else{
-            Log.d("guilherme", "is empty");
-            return VIEW_TYPE_EMPTY_LIST_PLACEHOLDER;
-        }
+    public interface Test{
+        void task_deleted(int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -86,10 +63,23 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(), "clicked", Toast.LENGTH_SHORT).show();
+
+                }
+
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view) {
+                    Test test = (Test) view.getContext();
+                    test.task_deleted(getAdapterPosition());
+                    return false;
                 }
             });
+
             check = itemView.findViewById(R.id.check);
         }
+
+
     }
 }
